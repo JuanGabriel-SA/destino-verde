@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500&family=Vazirmatn:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@500;600&family=Rubik:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap');
+:root {
+    --cor-primaria-01: #108489;
+    --cor-primaria-02: #F8F1F1;
+    --cor-primaria-03: #11698E;
+    --cor-primaria-04: #19456B;
+}
+
+html {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+body {
+    margin: 0;
+}
+
+h1 {
+    font-family: Inter, sans-serif;
+}
+
+h3 {
+    font-family: Heebo, sans-serif;
+}
+
+p {
+    font-family: Inter, sans-serif;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

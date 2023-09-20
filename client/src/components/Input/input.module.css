@@ -1,0 +1,49 @@
+.inputComponent {
+    display: flex;
+    font-family: Manrope, sans-serif;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+    transition: ease-in-out 0.4s;
+    width: 100%;
+    margin: 10px;
+}
+
+.inputComponent input {
+    font-family: Manrope, sans-serif;
+    padding: 10px;
+    border: none;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    outline: none;
+    transition: ease-in-out 0.4s;
+    width: 100%;
+}
+
+.inputPrimary input {
+    background-color: rgb(241, 241, 241);
+}
+
+.inputSecondary input {
+    background-color: #1085893c;
+}
+
+.inputSecondary input:focus {
+    background-color: white;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.208);
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.inputPrimary input:focus {
+    background-color: white;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.208);
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.inputIcon {
+    padding: 10px;
+    background-color: var(--cor-primaria-01);
+    color: white;
+}

@@ -1,0 +1,5 @@
+# Ignorar a pasta .next dentro da pasta client
+client/.next/
+
+# Ignorar a pasta node_modules dentro da pasta client
+client/node_modules/

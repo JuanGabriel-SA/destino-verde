@@ -1,0 +1,15 @@
+.cardComponent {
+    padding: 15px;
+    min-height: 500px;
+    min-width: 400px;
+    background-color: white;
+}
+
+.cardHeader {
+    text-align: center;
+}
+
+.cardComponent h1 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+}

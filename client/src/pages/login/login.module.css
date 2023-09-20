@@ -1,0 +1,24 @@
+.main {
+    background-image: url('/imgs/svg04.svg');
+    background-position: center;
+    height: 100vh;
+    background-position-y: 81%;
+    background-repeat: repeat-x;
+    animation: backgroundEffect 4s cubic-bezier(0.14, 0, 0.81, 0.99) infinite alternate-reverse;
+  }
+  
+  .cardSection {
+    /* border-radius: 20px; */
+    height: 450px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  @keyframes backgroundEffect {
+    0% {
+      background-position-x: 0%;
+    }
+  
+    100% {
+      background-position-x: 100%;
+    }
+  }

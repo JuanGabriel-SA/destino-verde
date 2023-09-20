@@ -1,0 +1,31 @@
+.mapComponent {
+    height: 100vh;
+    width: 100%;
+    right: 0;
+    transition: ease-in-out 0.3s;
+    text-align: center;
+}
+
+.loadingText {
+    position: relative;
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+}
+
+.viewPlaceContent {
+    max-width: 300px;
+    font-family: Inter, sans-serif;
+}
+
+.viewPlaceContent button {
+    margin-top: 10px;
+    background-color: red !important;
+}
+
+.viewPlaceContent img {
+    margin-top: 5px;
+}
+
+.viewPlaceContent p {
+    font-weight: 400;
+}

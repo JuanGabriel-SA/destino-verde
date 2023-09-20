@@ -1,0 +1,13 @@
+.mainHomeUser {
+    display: flex;
+    flex-direction: column;
+}
+
+.sideNavbar {
+    display: flex;
+    max-width: 17vw;
+}
+
+.mapContent {
+    display: flex;
+}

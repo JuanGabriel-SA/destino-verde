@@ -1,0 +1,48 @@
+.alertMessageError {
+    width: 100%;
+    background-color: rgb(213, 75, 75);
+    color: white;
+    padding: 10px;
+    border-radius: 20px;
+    width: 100%;
+    align-items: center;
+    box-shadow: 3px 3px 5px 1px rgba(0, 0, 0, 0.3);
+    font-family: Inter, sans-serif;
+}
+
+.alertMessageError label {
+    color: white !important;
+}
+
+.alertComponent {
+    /* display: flex; */
+    width: 100%;
+    align-items: center;
+    justify-content:center;
+    flex-direction: column;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.alertIcon {
+    font-size: 20px;
+    margin-right: 10px;
+    position: relative;
+    top: 2px;
+}
+
+.closeIcon {
+    position: relative;
+    margin-bottom: 0px;
+    width: 0px;
+    height: 0px;
+    left: 40%;
+    top: 15px;
+    color: white;
+    transition: ease-out 100ms;
+}
+
+.closeIcon:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
