@@ -1,51 +1,59 @@
 import { Col, Divider, Row } from 'antd'
-import Card from '@/components/Card'
-import Input from '@/components/Input'
-import { AiFillLock, AiOutlineLogin, AiOutlineRedEnvelope } from 'react-icons/ai';
-import { MdOutlineMailOutline } from 'react-icons/md';
 import Button from '@/components/Button';
-import Link from 'next/link';
 import styles from './home.module.css';
+import { BiLogIn, BiSearch } from 'react-icons/bi';
+import { useSpring, animated } from '@react-spring/web';
+import { useState } from 'react';
 export default function Home() {
+
+  const animatedProps = useSpring({
+    background: 'linear-gradient(180deg, #9CC3CC, #E5FFFF)',
+    from: { background: 'linear-gradient(360deg, #6E8CBD, #94D5FF)' }, 
+    config: { duration: 3000 },
+    reverse: true,
+    loop: { reverse: true }
+  });
+
   return (
-    <main className={styles.mainHome}>
+    <animated.main className={styles.mainHome} style={{  ...animatedProps}}>
       <Row justify={'center'}>
-        <Col xs={{ span: 8 }}>
-          <Row justify='center'>
-            <Card className={styles.cardHome}>
-              <Row justify='center'>
-                <Col xs={{ span: 24 }}>
-                  <Row justify={'center'}>
-                    <img style={{marginBottom: -40}} src='/imgs/logo.png' width={300} />
-                  </Row>
-                </Col>
-                <Col xs={{ span: 24 }}>
-                  <Row justify={'center'}>
-                    <h2 style={{ fontWeight: 400, margin: 25, fontFamily: 'Montserrat, sans-serif' }}>
-                      Auxilie no descarte de resíduos.
-                    </h2>
-                  </Row>
-                  <Divider />
-                </Col>
-                <Col xs={{ span: 24 }}>
-                  <Row justify={'center'}>
-                    <Col flex='auto'>
-                      <Link href='/login'>
-                        <Button style={{ width: '90%' }} icon={AiOutlineLogin}>Entrar</Button>
-                      </Link>
-                    </Col>
-                    <Col flex='auto'>
-                      <Link href='/sign-up'>
-                        <Button style={{ width: '90%' }} icon={AiOutlineLogin}>Cadastrar-se</Button>
-                      </Link>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Card>
+        <Col xs={{ span: 12 }}>
+          <Row>
+            <img className={styles.logo} src='/imgs/logo02.png' width={200} />
+          </Row>
+        </Col>
+        <Col xs={{ span: 12 }}>
+          <Row justify='end'>
+            <Button icon={BiLogIn}>Entrar</Button>
+          </Row>
+        </Col>
+        <Col xs={{ span: 24 }}>
+          <Row justify={'center'}>
+            <div className={styles.titleField}>
+              <h1>
+                Contribua para um planeta mais limpo.
+              </h1>
+              <p>Cadastre e visualize pontos de descarte
+                <b> pertinhos de você.</b>
+              </p>
+            </div>
+          </Row>
+        </Col>
+        <Col xs={{ span: 24 }}>
+          <Row justify={'center'}>
+            <div className={styles.inputField}>
+              <input placeholder='Digite seu CEP...' className={styles.inputCep} />
+              <input placeholder='Digite seu Número...' className={styles.inputNumber} />
+              <button>
+                Visualizar pontos
+                <span>
+                  <BiSearch />
+                </span>
+              </button>
+            </div>
           </Row>
         </Col>
       </Row>
-    </main>
+    </animated.main>
   )
 }
