@@ -1,22 +1,25 @@
-import { Col, Divider, Row } from 'antd';
+import { Col, Divider, Row, notification } from 'antd';
 import styles from './Navbar.module.css';
-import { BiExit, BiHome, BiLocationPlus, BiMap, BiSearch, BiSolidUserCircle } from 'react-icons/bi';
+import { BiExit, BiHome, BiLocationPlus, BiMap, BiRecycle, BiSearch, BiSolidUserCircle } from 'react-icons/bi';
 import { motion } from 'framer';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '@/components/Input';
 import Button from '@/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAddress } from '@/redux/actions/Addres.actions';
 import Alert from '@/components/Alert';
 import { showNavbar } from '@/redux/actions/Navbar.actions';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+
 const Navbar = () => {
     const [cep, setCep] = useState('');
-    const [error, setError] = useState(false);
     const [showCepError, setShowCepError] = useState(false);
     const [addressNumber, setAddressNumber] = useState('');
-    const [hoverNavbar, setHoverNavbar] = useState(false);
-    const state = useSelector(state => state);
+    const navbarShow = useSelector(state => state.navbarShow);
+    const stateUser = useSelector(state => state.user);
     const dispatch = useDispatch();
+    const router = useRouter();
 
     const navVariants = {
         show: {
@@ -52,7 +55,6 @@ const Navbar = () => {
         },
     }
 
-
     async function getAddres() {
         if (validateAddress())
             await fetch(`https://viacep.com.br/ws/${cep}/json/`)
@@ -62,11 +64,19 @@ const Navbar = () => {
                         let aux = { ...data, numero: addressNumber }
                         dispatch(setAddress(aux));
                     } else {
-                        setError('CEP não encontrado.');
+                        notification.error({
+                            message: 'CEP não encontrado',
+                            description: 'Digite um CEP válido.',
+                            placement: 'topLeft'
+                        });
                     }
                 })
                 .catch((error) => {
-                    setError('Ocorreu um erro ao buscar o CEP');
+                    notification.error({
+                        message: 'Ocorreu um erro ao buscar o CEP',
+                        description: 'Digite um CEP válido.',
+                        placement: 'topLeft'
+                    });
                 });
         else
             setShowCepError(true);
@@ -80,11 +90,43 @@ const Navbar = () => {
             return false
     }
 
+    function createItems() {
+        let items = [];
+        const currentURL = router.asPath;
+
+        if (currentURL !== '/home-user') {
+            items.push(
+                <motion.li variants={childVariants} className={styles.navbarListItem}>
+                    <span>
+                        <BiMap />
+                    </span>
+                    <h3>Mapa</h3>
+                </motion.li>
+            )
+        }
+
+        if (currentURL !== '/analyze-image') {
+            items.push(
+                <Link href='/analyze-image' style={{color: 'black'}}>
+                    <motion.li variants={childVariants} className={styles.navbarListItem}>
+                        <span>
+                            <BiRecycle />
+                        </span>
+                        <h3>Analisar reciclável</h3>
+                    </motion.li>
+                </Link>
+            )
+        }
+
+        return items;
+
+    }
+
     return (
         <motion.div
             initial='hidden'
             variants={navVariants}
-            animate={state.navbarShow ? 'show' : 'hidden'}
+            animate={navbarShow ? 'show' : 'hidden'}
             onMouseEnter={e => dispatch(showNavbar(true))}
             onMouseLeave={e => dispatch(showNavbar(false))}
             className={styles.navbarComponent}>
@@ -92,14 +134,15 @@ const Navbar = () => {
                 <Col xs={{ span: 24 }}>
                     <Row justify={'center'}>
                         <img
-                            src={state.navbarShow ? '/imgs/logo02.png' : '/imgs/logo04.png'}
-                            className={state.navbarShow ? styles.navbarLogoShow : styles.navbarLogoHidden} />
+                            src={navbarShow ? '/imgs/logo02.png' : '/imgs/logo04.png'}
+                            className={navbarShow ? styles.navbarLogoShow : styles.navbarLogoHidden} />
                     </Row>
                     <Divider />
                 </Col>
                 <Col xs={{ span: 24 }}>
                     <Row>
                         <ul className={styles.navbarList}>
+                            {createItems()}
                             <motion.li variants={childVariants} className={styles.navbarListItem}>
                                 <span>
                                     <BiMap />
@@ -109,6 +152,7 @@ const Navbar = () => {
                             <motion.li variants={childVariants} className={styles.searchLocationField}>
                                 <Input
                                     onFocus={e => setShowCepError(false)}
+                                    value={cep}
                                     mask='99999-999'
                                     onChange={e => setCep(e.target.value)}
                                     placeholder='Digite o CEP...'
@@ -135,9 +179,9 @@ const Navbar = () => {
                                 </Alert>
                                 <Button onClick={e => getAddres()} style={{ marginLeft: 0 }} icon={BiSearch}>Buscar</Button>
                             </motion.li>
-                            <Divider />
                             <motion.li variants={childVariants}>
                                 <Col xs={{ span: 24 }}>
+                                    <Divider />
                                     <Row justify={'center'}>
                                         <Col xs={{ span: 24 }}>
                                             <Row>
@@ -145,7 +189,7 @@ const Navbar = () => {
                                                     <span>
                                                         <BiSolidUserCircle size={25} />
                                                     </span>
-                                                    <h3>rewualgabriel@gmail.com</h3>
+                                                    <h3>{stateUser !== null && stateUser.email}</h3>
                                                 </div>
                                             </Row>
                                         </Col>

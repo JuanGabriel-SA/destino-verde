@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Alert from '@/components/Alert';
 import { useRouter } from 'next/router';
+import validator from 'validator';
 
 export default function signUp() {
     const router = useRouter();
@@ -53,6 +54,36 @@ export default function signUp() {
             setShowError(true);
             return false;
         }
+
+        if (!validator.isEmail(email)) {
+            await setErrorMessage('Digite um email válido.');
+            setShowError(true);
+            return false;
+        }
+
+        const user = await fetch(`http://localhost:4000/verify-user/${email}`).then(res => res.json());
+
+        if (user.length > 0) {
+            await setErrorMessage('Já existe um usuário com esse email.');
+            setShowError(true);
+            return false;
+        }
+
+        if (!validatePassword()) {
+            await setErrorMessage('A senha deve conter pelo menos 6 carácteres e uma letra em maiúsculo.');
+            setShowError(true);
+            return false;
+        }
+
+        return true;
+    }
+
+    function validatePassword() {
+        if (password.length < 6)
+            return false;
+        if (!/[A-Z]/.test(password))
+            return false;
+
         return true;
     }
 

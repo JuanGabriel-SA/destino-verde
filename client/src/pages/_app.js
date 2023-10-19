@@ -3,6 +3,7 @@ import Head from "next/head";
 import { Provider } from 'react-redux';
 import store from '../redux/store';
 import Navbar from '@/patterns/Navbar';
+import Modal from '@/components/Modal';
 function MyApp({ Component, pageProps }) {
   return (
     <>

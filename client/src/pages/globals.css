@@ -17,6 +17,10 @@ html {
     overflow-x: hidden;
 }
 
+.ant-spin-dot-item {
+    background-color: var(--cor-primaria-01) !important;
+}
+
 body {
     margin: 0;
 }

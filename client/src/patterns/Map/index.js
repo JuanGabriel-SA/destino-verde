@@ -29,7 +29,7 @@ export default function Map({ style, ...props }) {
 
   useEffect(() => {
     //Toda vez que um endereço válido ser inserido, mostra os locais de descarte próximos dele...
-    if (state.address.logradouro !== undefined)
+    if (state.address !== null)
       showMarkers();
   }, [state.address])
 
@@ -51,7 +51,17 @@ export default function Map({ style, ...props }) {
       setCurrentLocation(location);
 
       const map = new google.maps.Map(
-        document.getElementById('map'), { center: location, zoom: 14 });
+        document.getElementById('map'),
+        {
+          center: location, zoom: 14,
+          styles: [{
+            featureType: 'poi',
+            elementType: 'labels',
+            stylers: [
+              { visibility: 'off'}
+            ]
+          }]
+        });
 
       const request = {
         location: location,
@@ -68,10 +78,23 @@ export default function Map({ style, ...props }) {
 
           //Deixa o mapa centralizado na localização fornecida...
           map.setCenter(location);
+          excluirTodosMarcadoresNativos(map);
         }
       }, 1000)
     }
   };
+
+  function excluirTodosMarcadoresNativos(map) {
+    // Recupere todos os marcadores do mapa
+    const marcadoresNativos = map.markers;
+
+    // Verifique se há marcadores e remova-os
+    if (marcadoresNativos && marcadoresNativos.length > 0) {
+      for (let i = 0; i < marcadoresNativos.length; i++) {
+        marcadoresNativos[i].setMap(null);
+      }
+    }
+  }
 
   function createMarkers(place, map) {
     const infowindow = new google.maps.InfoWindow();
@@ -79,7 +102,11 @@ export default function Map({ style, ...props }) {
     const marker = new google.maps.Marker({
       map,
       position: place.geometry.location,
-      title: place.name
+      title: place.name,
+      icon: {
+        url: '/imgs/logo03.png',
+        scaledSize: new google.maps.Size(50, 50), // Defina as dimensões desejadas
+      },
     });
 
     marker.addListener("click", () => {
@@ -101,7 +128,7 @@ export default function Map({ style, ...props }) {
       infowindow.setContent(infowindowComponent);
       infowindow.open(map, marker);
       currentInfowindow = infowindow;
-      
+
     });
   }
 
@@ -109,14 +136,14 @@ export default function Map({ style, ...props }) {
     return (
       <motion.div
         initial={{ opacity: 0, x: -200 }}
-        animate={{ 
-          opacity: 1, 
+        animate={{
+          opacity: 1,
           x: 0,
           transition: {
             ease: 'circOut',
             duration: 0.4
-        } 
-      }}
+          }
+        }}
         className={styles.viewPlaceContent}>
         <Row>
           <Col xs={{ span: 24 }}>

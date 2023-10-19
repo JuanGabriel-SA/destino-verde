@@ -52,7 +52,6 @@ const verifyUser = app => {
 const getToken = app => {
   app.get('/get-token/:id', (req, res) => {
           const id = req.params.id;  
-          
           //Define o token de acesso as APIS...
           const token = jwt.sign({ id }, process.env.SECRET_KEY);
           return res.json(token);

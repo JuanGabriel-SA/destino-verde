@@ -11,6 +11,8 @@ import { useState } from 'react';
 import Alert from '@/components/Alert';
 import { useDispatch, useSelector } from 'react-redux';
 import { newUser } from '@/redux/actions/User.actions';
+import cookie from 'js-cookie';
+import validator from 'validator';
 
 export default function Login() {
   const router = useRouter();
@@ -18,35 +20,43 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const state = useSelector(state => state.user);
   const dispatch = useDispatch();
 
   async function doLogin() {
-    
-    if (email !== '' && password !== '') {
+
+    if (await validateLogin()) {
       const user = await fetch(`http://localhost:4000/login/${email}/${password}`).then(res => res.json());
 
       //Usuário encontrado...
       if (user.length > 0) {
-        router.push('/home-user');
-
         //Adiciona no estado local...
         dispatch(newUser({
           email: email,
           senha: password
         }));
-      }
+        const token = await fetch(`http://localhost:4000/get-token/${user[0].id}`).then(res => res.json());
+        const isCookiesAllowed = localStorage.getItem('allow_cookies');
 
+        if (isCookiesAllowed == null || isCookiesAllowed == false)
+          localStorage.setItem('user_token', JSON.stringify(token));
+        else
+          cookie.set('user_token', token, { expires: 7 });
+
+        router.push('/home-user');
+      }
       //Usuário não encontrado...
       else {
-        await setErrorMessage('Email ou senha incorreto(s).');
         setShowError(true);
       }
-    } else {
-      await setErrorMessage('Não deixe campos em branco.');
-      setShowError(true);
     }
+  }
 
+  function validateLogin() {
+    if (email === "" || password === "") {
+      setShowError(true);
+      return false;
+    } else
+      return (validator.isEmail(email));
   }
 
   return (
@@ -75,11 +85,20 @@ export default function Login() {
                     </Col>
                     <Col xs={{ span: 24 }}>
                       <Row justify='center'>
-                        <Input onChange={e => setPassword(e.target.value)} icon={AiFillLock} style={{ marginTop: 20 }} placeholder='Senha' />
+                        <Input
+                          type='password'
+                          onKeyPress={e => {
+                            if (e.key === 'Enter')
+                              doLogin();
+                          }}
+                          onChange={e => setPassword(e.target.value)}
+                          icon={AiFillLock}
+                          style={{ marginTop: 20 }}
+                          placeholder='Senha' />
                       </Row>
                     </Col>
                     <Alert trigger={setShowError} visible={showError} type='error'>
-                      {errorMessage}
+                      Email ou senha incorreto(s).
                     </Alert>
                     <Col xs={{ span: 24 }}>
                       <Row justify={'center'}>

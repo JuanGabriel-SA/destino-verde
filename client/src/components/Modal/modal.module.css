@@ -1,0 +1,40 @@
+.modalComponent {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modalContent {
+    background-color: #fff;
+    padding: 25px;
+    max-width: 30%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    position: relative;
+    min-height: 50%;
+}
+
+.closeModalButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    padding: 15px;
+    color: rgba(0, 0, 0, 0.55);
+    border: 2px solid rgba(0, 0, 0, 0.19);
+    transition: ease-in-out 0.2s;
+    text-align: center;
+}
+
+.closeModalButton:hover {
+    background-color: rgb(213, 75, 75);
+    border-color: rgb(213, 75, 75);
+    color: white;
+    transform: scale(1.1);
+}

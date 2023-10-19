@@ -12,7 +12,8 @@ app.use(cors({
 }));
 
 const cookieParser = require('cookie-parser');
-const { getUser, newUser, verifyUser, loginUser } = require('./api/userAPI');
+const { getUser, newUser, verifyUser, loginUser, getToken } = require('./api/userAPI');
+const { getImageInfo } = require('./api/imageAPI');
 require('dotenv').config();
 
 app.use(express.json({ extended: false }));
@@ -24,6 +25,8 @@ getUser(app);
 newUser(app);
 verifyUser(app);
 loginUser(app);
+getToken(app);
+getImageInfo(app);
 // --> ROTAS <-- //
 
 const PORT = 4000;

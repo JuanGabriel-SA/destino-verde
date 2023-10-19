@@ -1,5 +1,5 @@
 .alertMessageError {
-    width: 100%;
+    max-width: 90% !important;
     background-color: rgb(213, 75, 75);
     color: white;
     padding: 10px;
@@ -8,10 +8,12 @@
     align-items: center;
     box-shadow: 3px 3px 5px 1px rgba(0, 0, 0, 0.3);
     font-family: Inter, sans-serif;
+    padding-left: 25px;
 }
 
 .alertMessageError label {
     color: white !important;
+    max-width: 50%;
 }
 
 .alertComponent {

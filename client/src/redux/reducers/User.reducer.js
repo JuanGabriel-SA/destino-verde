@@ -1,4 +1,4 @@
-export default function (state = {}, action) {
+export default function (state = null, action) {
     switch (action.type) {
         case 'NEW_USER':
             return action.payload;
