@@ -7,24 +7,24 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { parseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import * as cookie from 'cookie'
-export async function getServerSideProps(ctx) {
-    if (ctx.req.headers.cookie !== undefined) {
-        const { user_token } = cookie.parse(ctx.req.headers.cookie);
-        return {
-            props: {
-                token: user_token
-            }
-        }
-    } else {
-        return {
-            redirect: {
-                permanent: false,
-                destination: "/",
-            },
-            props: {}
-        }
-    }
-}
+// export async function getServerSideProps(ctx) {
+//     if (ctx.req.headers.cookie !== undefined) {
+//         const { user_token } = cookie.parse(ctx.req.headers.cookie);
+//         return {
+//             props: {
+//                 token: user_token
+//             }
+//         }
+//     } else {
+//         return {
+//             redirect: {
+//                 permanent: false,
+//                 destination: "/",
+//             },
+//             props: {}
+//         }
+//     }
+// }
 
 export default function homeUser({ token }) {
     useEffect(() => {
@@ -34,10 +34,14 @@ export default function homeUser({ token }) {
     return (
         <main className={styles.home}>
             <Row>
-                <div className={styles.sideNavbar}>
-                    <Navbar />
-                </div>
-                <Col flex='auto'>
+                <Col
+                    lg={{ span: 4 }} md={{ span: 8 }} sm={{ span: 24 }} xs={{ span: 24 }}
+                    className={styles.colNavbar}>
+                    <div className={styles.sideNavbar}>
+                        <Navbar />
+                    </div>
+                </Col>
+                <Col lg={{ span: 20 }} md={{ span: 16 }} sm={{ span: 24 }} xs={{ span: 24 }}>
                     <div className={styles.mapContent}>
                         <Map />
                     </div>

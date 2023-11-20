@@ -137,7 +137,7 @@ export default function Home() {
             </Link>
           </Row>
         </Col>
-        <Col xs={{ span: 24 }}>
+        <Col lg={{ span: 14 }} xs={{ span: 24 }}>
           <Row justify={'center'}>
             <div className={styles.titleField}>
               <h1>
@@ -149,29 +149,46 @@ export default function Home() {
             </div>
           </Row>
         </Col>
-        <Col xs={{ span: 24 }}>
-          <Row justify={'center'}>
-            <div className={styles.inputField}>
-              <ReactInputMask mask='99999-999' onChange={e => setCep(e.target.value)}>
-                {(props) => <input
-                  placeholder='Digite seu CEP...'
-                  className={styles.inputCep} />}
-              </ReactInputMask>
-              <input
-                value={addressNumber}
-                onChange={e => {
-                  let formatedValue = e.target.value.replace(/\D/g, '');
-                  setAddressNumber(formatedValue);
-                }}
-                placeholder='Digite seu Número...'
-                className={styles.inputNumber} />
-              <button onClick={e => verifyLogin()}>
-                Visualizar pontos
-                <span>
-                  <BiSearch />
-                </span>
-              </button>
-            </div>
+        <Col lg={{ span: 14 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+          <Row justify={'center'} className={styles.inputField}>
+            <Col lg={{ span: 6 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+              <Row justify={'start'}>
+                <ReactInputMask mask='99999-999' onChange={e => setCep(e.target.value)}>
+                  {(props) => <input
+                    placeholder='Digite seu CEP...'
+                    className={styles.inputCep} />}
+                </ReactInputMask>
+              </Row>
+            </Col>
+            <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+              <Row justify={'start'}>
+                <Col flex={'auto'}>
+                  <input
+                    style={{ width: '88%' }}
+                    value={addressNumber}
+                    onChange={e => {
+                      let formatedValue = e.target.value.replace(/\D/g, '');
+                      setAddressNumber(formatedValue);
+                    }}
+                    onKeyDown={e => {
+                      if (e.code == 'Enter')
+                        verifyLogin()
+                    }}
+                    placeholder='Digite seu Número...'
+                    className={styles.inputNumber} />
+                </Col>
+                <Col xs={{ span: 9 }}>
+                  <Row justify={'start'}>
+                    <button onClick={e => verifyLogin()}>
+                      <label>Visualizar pontos</label>
+                      <span>
+                        <BiSearch />
+                      </span>
+                    </button>
+                  </Row>
+                </Col>
+              </Row>
+            </Col>
           </Row>
         </Col>
       </Row>

@@ -47,11 +47,10 @@ const getImageInfo = app => {
             } catch (error) {
                 console.error('Ocorreu um erro na tradução:', error);
             }
-
             try {
                 const resultsArray = await Promise.all(queryPromises);
                 const anyResultsFound = resultsArray.includes(true);
-                res.json(anyResultsFound ? { imageContent: translatedItem } : { imageContent: null });
+                res.json(anyResultsFound ? { imageContent: translatedItem, reciclabe: true } : { imageContent: translatedItem, reciclable: false });
             } catch (error) {
                 console.error(error);
                 res.status(500).send('Erro ao executar as consultas.');

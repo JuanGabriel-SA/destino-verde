@@ -1,11 +1,13 @@
 import styles from './button.module.css';
-const Button = ({ children, icon, style, ...props }) => {
+const Button = ({ children, icon, style, iconStyle, ...props }) => {
     const Icon = icon;
     return (
         <button style={{ ...style }} className={styles.buttonComponent} {...props}>
-            {children}
+            <label style={{cursor: 'pointer'}}>
+                {children}
+            </label>
             {Icon !== undefined &&
-                <span className={styles.buttonIcon}>
+                <span className={styles.buttonIcon} style={{ ...iconStyle }}>
                     <Icon />
                 </span>
             }

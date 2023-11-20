@@ -8,30 +8,65 @@ import Button from '@/components/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAddress } from '@/redux/actions/Addres.actions';
 import Alert from '@/components/Alert';
-import { showNavbar } from '@/redux/actions/Navbar.actions';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { MdMenu } from 'react-icons/md';
 
 const Navbar = () => {
     const [cep, setCep] = useState('');
     const [showCepError, setShowCepError] = useState(false);
     const [addressNumber, setAddressNumber] = useState('');
-    const navbarShow = useSelector(state => state.navbarShow);
+    const [screenWidth, setScreenWidth] = useState(undefined);
+    const [screenHeight, setScreenHeight] = useState(undefined);
+    const [showAlternativeNav, setShowAlternativeNav] = useState(false);
+    const [collapseNav, setCollapseNav] = useState(true);
     const stateUser = useSelector(state => state.user);
     const dispatch = useDispatch();
     const router = useRouter();
 
+    const attScreen = () => {
+        setScreenWidth(window.innerWidth);
+        setScreenHeight(window.innerHeight);
+    };
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            // Apenas no lado do cliente (navegador), acesse window.innerWidth
+            setScreenWidth(window.innerWidth);
+            setScreenHeight(window.innerHeight);
+        }
+        window.addEventListener('resize', attScreen);
+        return () => {
+            window.removeEventListener('resize', attScreen);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (screenWidth <= 768)
+            setShowAlternativeNav(true);
+        else
+            setShowAlternativeNav(false);
+    }, [screenWidth])
+
+    useEffect(() => {
+        if (!showAlternativeNav)
+            setCollapseNav(false);
+        else
+            setCollapseNav(true);
+    }, [showAlternativeNav])
+
     const navVariants = {
         show: {
-            width: '17vw',
+            height: '100vh',
             transition: {
                 duration: 0.4,
                 ease: 'circOut',
-                staggerChildren: 0.3
+                staggerChildren: 0.2
             }
         },
-        hidden: {
-            width: '4vw',
+
+        hide: {
+            height: '20vh',
             transition: {
                 duration: 0.4,
                 ease: 'circOut',
@@ -40,19 +75,18 @@ const Navbar = () => {
         }
     }
 
-    const childVariants = {
-        hidden: {
-            opacity: 0,
-            x: -20,
-        },
+    const listVariants = {
         show: {
             opacity: 1,
-            x: 0,
             transition: {
                 ease: 'circOut',
                 duration: 0.3
             }
         },
+
+        hide: {
+            opacity: 0
+        }
     }
 
     async function getAddres() {
@@ -62,6 +96,9 @@ const Navbar = () => {
                 .then((data) => {
                     if (!data.erro) {
                         let aux = { ...data, numero: addressNumber }
+                        setCollapseNav(true);
+                        setAddressNumber('');
+                        setCep('');
                         dispatch(setAddress(aux));
                     } else {
                         notification.error({
@@ -96,7 +133,7 @@ const Navbar = () => {
 
         if (currentURL !== '/home-user') {
             items.push(
-                <motion.li variants={childVariants} className={styles.navbarListItem}>
+                <motion.li variants={listVariants} className={styles.navbarListItem}>
                     <span>
                         <BiMap />
                     </span>
@@ -107,8 +144,8 @@ const Navbar = () => {
 
         if (currentURL !== '/analyze-image') {
             items.push(
-                <Link href='/analyze-image' style={{color: 'black'}}>
-                    <motion.li variants={childVariants} className={styles.navbarListItem}>
+                <Link href='/analyze-image' style={{ color: 'black' }}>
+                    <motion.li className={styles.navbarListItem}>
                         <span>
                             <BiRecycle />
                         </span>
@@ -124,32 +161,36 @@ const Navbar = () => {
 
     return (
         <motion.div
-            initial='hidden'
+            initial='hide'
             variants={navVariants}
-            animate={navbarShow ? 'show' : 'hidden'}
-            onMouseEnter={e => dispatch(showNavbar(true))}
-            onMouseLeave={e => dispatch(showNavbar(false))}
+            animate={!collapseNav ? 'show' : 'hide'}
             className={styles.navbarComponent}>
-            <Row style={{ width: '100%' }}>
+            <Row>
                 <Col xs={{ span: 24 }}>
                     <Row justify={'center'}>
                         <img
-                            src={navbarShow ? '/imgs/logo02.png' : '/imgs/logo04.png'}
-                            className={navbarShow ? styles.navbarLogoShow : styles.navbarLogoHidden} />
+                            src={'/imgs/logo02.png'}
+                            className={styles.navbarLogoShow} />
                     </Row>
+                    {showAlternativeNav &&
+                        <button onClick={e => setCollapseNav(!collapseNav)} className={styles.collapseButton}>
+                            <MdMenu />
+                        </button>
+                    }
+
                     <Divider />
                 </Col>
                 <Col xs={{ span: 24 }}>
                     <Row>
                         <ul className={styles.navbarList}>
                             {createItems()}
-                            <motion.li variants={childVariants} className={styles.navbarListItem}>
+                            <motion.li variants={listVariants} className={styles.navbarListItem}>
                                 <span>
                                     <BiMap />
                                 </span>
                                 <h3>Cadastrar ponto de coleta</h3>
                             </motion.li>
-                            <motion.li variants={childVariants} className={styles.searchLocationField}>
+                            <motion.li variants={listVariants} className={styles.searchLocationField}>
                                 <Input
                                     onFocus={e => setShowCepError(false)}
                                     value={cep}
@@ -179,7 +220,7 @@ const Navbar = () => {
                                 </Alert>
                                 <Button onClick={e => getAddres()} style={{ marginLeft: 0 }} icon={BiSearch}>Buscar</Button>
                             </motion.li>
-                            <motion.li variants={childVariants}>
+                            <motion.li variants={listVariants}>
                                 <Col xs={{ span: 24 }}>
                                     <Divider />
                                     <Row justify={'center'}>

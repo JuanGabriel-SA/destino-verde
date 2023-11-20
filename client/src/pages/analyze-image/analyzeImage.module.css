@@ -13,8 +13,8 @@
 }
 
 .sideNavbar {
-    display: flex;
-    max-width: 17vw;
+    /* display: flex;
+    max-width: 17vw; */
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
 }
 
@@ -75,7 +75,6 @@
     color: white;
     font-family: Inter, sans-serif;
     border-radius: 10px;
-    cursor: pointer;
     box-shadow: none;
     transition: ease-in-out 0.2s;
 }
@@ -115,6 +114,29 @@
     padding: 25px;
     position: relative;
 }
+
+.rowImageContent {
+    min-height: 100vh;
+    width: 100%;
+}
+.mobileImageField {
+    width: 100%;
+
+}
+
+@media (max-width: 768px) {
+    .imageContainer {
+      box-shadow: none;
+    }
+
+    .sideNavbar {
+        box-shadow: none;
+    }
+    .rowImageContent {
+        min-height: initial;
+        width: 100%;
+    }
+  }
 
 @keyframes backgroundEffect {
     0% {
