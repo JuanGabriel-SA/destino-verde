@@ -11,6 +11,8 @@ import Alert from '@/components/Alert';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { MdMenu } from 'react-icons/md';
+import Cookies from 'js-cookie';
+import { setUser } from '@/redux/actions/User.actions';
 
 const Navbar = () => {
     const [cep, setCep] = useState('');
@@ -19,8 +21,10 @@ const Navbar = () => {
     const [screenWidth, setScreenWidth] = useState(undefined);
     const [screenHeight, setScreenHeight] = useState(undefined);
     const [showAlternativeNav, setShowAlternativeNav] = useState(false);
-    const [collapseNav, setCollapseNav] = useState(true);
+    const [collapseNav, setCollapseNav] = useState(false);
     const stateUser = useSelector(state => state.user);
+    const stateMarkers = useSelector(state => state.markers);
+    const stateCoordinates = useSelector(state => state.userCoordinates);
     const dispatch = useDispatch();
     const router = useRouter();
 
@@ -133,24 +137,26 @@ const Navbar = () => {
 
         if (currentURL !== '/home-user') {
             items.push(
-                <motion.li variants={listVariants} className={styles.navbarListItem}>
-                    <span>
-                        <BiMap />
-                    </span>
-                    <h3>Mapa</h3>
-                </motion.li>
+                <Link key="home-user-link" href='/home-user' style={{ color: 'black' }}>
+                    <li className={styles.navbarListItem}>
+                        <span>
+                            <BiMap />
+                        </span>
+                        <h3>Mapa</h3>
+                    </li>
+                </Link>
             )
         }
 
         if (currentURL !== '/analyze-image') {
             items.push(
-                <Link href='/analyze-image' style={{ color: 'black' }}>
-                    <motion.li className={styles.navbarListItem}>
+                <Link key="analyze-image-link" href='/analyze-image' style={{ color: 'black' }}>
+                    <li className={styles.navbarListItem}>
                         <span>
                             <BiRecycle />
                         </span>
                         <h3>Analisar reciclável</h3>
-                    </motion.li>
+                    </li>
                 </Link>
             )
         }
@@ -159,9 +165,71 @@ const Navbar = () => {
 
     }
 
+    function createPlacesList() {
+        const places = [...stateMarkers];
+        return places.map((item, index) =>
+            <li>
+                <h3>{item.title}</h3>
+                <h5>{item.address}</h5>
+                <h4>{calculateDistance(item)}</h4>
+                {/* <Divider /> */}
+            </li>
+        )
+    }
+
+    function calculateDistance(place) {
+        const userLocation = stateCoordinates;
+        const placeLocation = place.position;
+
+        // Função para converter graus para radianos
+        const toRadians = angle => angle * (Math.PI / 180);
+
+        // Função para calcular a distância usando a fórmula de Haversine
+        const haversineDistance = (lat1, lon1, lat2, lon2) => {
+            // Raio da Terra em metros
+            const R = 6371e3; // metros
+
+            // Converter coordenadas para radianos
+            const phi1 = toRadians(lat1);
+            const phi2 = toRadians(lat2);
+            const deltaPhi = toRadians(lat2 - lat1);
+            const deltaLambda = toRadians(lon2 - lon1);
+
+            // Calcular a fórmula da Haversine
+            const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            // Calcular a distância em metros
+            const distance = R * c;
+
+            return distance;
+        };
+
+        // Calcular a distância entre o usuário e o local
+        const distanceInMeters = haversineDistance(
+            userLocation.lat,
+            userLocation.lng,
+            placeLocation.lat,
+            placeLocation.lng
+        );
+
+        let distance;
+        if (distanceInMeters >= 1000) {
+            // Se a distância for maior ou igual a 1000 metros, converter para quilômetros
+            distance = (distanceInMeters / 1000).toFixed(2) + " km";
+        } else {
+            // Se a distância for menor que 1000 metros, manter em metros sem decimais
+            distance = Math.floor(distanceInMeters) + " m";
+        }
+
+        return distance;
+    }
+
     return (
         <motion.div
-            initial='hide'
+            initial='show'
             variants={navVariants}
             animate={!collapseNav ? 'show' : 'hide'}
             className={styles.navbarComponent}>
@@ -184,13 +252,7 @@ const Navbar = () => {
                     <Row>
                         <ul className={styles.navbarList}>
                             {createItems()}
-                            <motion.li variants={listVariants} className={styles.navbarListItem}>
-                                <span>
-                                    <BiMap />
-                                </span>
-                                <h3>Cadastrar ponto de coleta</h3>
-                            </motion.li>
-                            <motion.li variants={listVariants} className={styles.searchLocationField}>
+                            <li className={styles.searchLocationField}>
                                 <Input
                                     onFocus={e => setShowCepError(false)}
                                     value={cep}
@@ -219,8 +281,8 @@ const Navbar = () => {
                                     CEP ou número incorreto(s).
                                 </Alert>
                                 <Button onClick={e => getAddres()} style={{ marginLeft: 0 }} icon={BiSearch}>Buscar</Button>
-                            </motion.li>
-                            <motion.li variants={listVariants}>
+                            </li>
+                            <li variants={listVariants}>
                                 <Col xs={{ span: 24 }}>
                                     <Divider />
                                     <Row justify={'center'}>
@@ -237,13 +299,38 @@ const Navbar = () => {
                                         <Col xs={{ span: 24 }}>
                                             <Row>
                                                 <div className={styles.loggoutField}>
-                                                    <Button style={{ margin: 0 }} icon={BiExit}>Sair</Button>
+                                                    <Button
+                                                        onClick={async e => {
+                                                            await router.push('/login');
+                                                            Cookies.remove('user_token');
+                                                            Cookies.remove('user_data');
+                                                            dispatch(setUser(null));
+                                                        }}
+                                                        style={{ margin: 0 }}
+                                                        icon={BiExit}>Sair</Button>
                                                 </div>
                                             </Row>
                                         </Col>
                                     </Row>
                                 </Col>
-                            </motion.li>
+                            </li>
+
+                            <li>
+                                {(showAlternativeNav && stateMarkers.length > 0) &&
+                                    <div className={styles.placeListContainer}>
+                                        <Divider />
+                                        <h2 style={{
+                                            textAlign: 'center',
+                                            fontFamily: 'Inter, sans-serif',
+                                            margin: 0
+                                        }}>Locais próximos</h2>
+                                        <Divider />
+                                        <ul className={styles.placesList}>
+                                            {createPlacesList()}
+                                        </ul>
+                                    </div>
+                                }
+                            </li>
                         </ul>
                     </Row>
                 </Col>

@@ -1,24 +1,47 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from './analyzeImage.module.css';
-import { Col, Divider, Image, Row, Space, Spin, Upload, notification } from "antd";
+import { Col, Divider, Image, Row, Space, Spin, Upload } from "antd";
 import Button from "@/components/Button";
-import { BiArrowToRight, BiCamera, BiSearch, BiUpload } from "react-icons/bi";
+import { BiArrowToRight, BiSearch, BiUpload } from "react-icons/bi";
 import Card from "@/components/Card";
-import { RiCloseCircleFill, RiEye2Line, RiEyeFill } from "react-icons/ri";
+import { RiCloseCircleFill } from "react-icons/ri";
 import { AiOutlineEye } from "react-icons/ai";
-import { FaCamera, FaRecycle } from 'react-icons/fa';
-import { useSelector } from "react-redux";
+import { FaRecycle } from 'react-icons/fa';
+import { useDispatch, useSelector } from "react-redux";
 import { motion } from "framer";
-import CameraComponent from "@/components/Camera";
 import Navbar from "@/patterns/Navbar";
+import * as cookie from 'cookie'
+import { setUser } from "@/redux/actions/User.actions";
 
-export default function analyzeImage() {
+export async function getServerSideProps(ctx) {
+    if (ctx.req.headers.cookie !== undefined) {
+        const { user_token } = cookie.parse(ctx.req.headers.cookie);
+        const { user_data } = cookie.parse(ctx.req.headers.cookie);
+        return {
+            props: {
+                token: user_token,
+                user: user_data
+            }
+        }
+    } else {
+        return {
+            redirect: {
+                permanent: false,
+                destination: "/login",
+            },
+            props: {}
+        }
+    }
+}
+
+export default function analyzeImage({ user, token }) {
     const [imageUrl, setImageUrl] = useState('');
     const [image, setImage] = useState();
     const [isReciclabe, setIsReciclable] = useState(null);
     const [showLoading, setShowLoading] = useState(false);
     const [reciclabeName, setReciclabeName] = useState('');
     const [showReciclabe, setShowReciclabe] = useState(false);
+    const dispatch = useDispatch();
     const stateUser = useSelector(state => state.user);
 
     const modalVariants = {
@@ -41,6 +64,10 @@ export default function analyzeImage() {
             }
         }
     }
+    useEffect(() => {
+        if (stateUser == null)
+            dispatch(setUser(JSON.parse(user)));
+    }, [])
 
     const handleChange = async (e) => {
         const imageFile = e.file.originFileObj;
@@ -66,7 +93,6 @@ export default function analyzeImage() {
             });
 
             if (result.status === 200) {
-                console.log(result)
                 const data = await result.json();
                 // Tratar o caso de sucesso
                 console.log('Resposta bem-sucedida:', data);

@@ -4,8 +4,10 @@ import ReactDOM from 'react-dom/client';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import styles from './map.module.css';
 import { motion } from 'framer';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Col, Divider, Row } from 'antd';
+import { addMarker, resetMarkers } from '@/redux/actions/Markers.actions';
+import { setCoordinates } from '@/redux/actions/UserCoordinates.actions';
 
 const containerStyle = {
   width: '100%',
@@ -20,7 +22,8 @@ export default function Map({ style, ...props }) {
   });
 
   const [mapZoom, setMapZoom] = useState(4);
-  const state = useSelector(state => state);
+  const stateAddress = useSelector(state => state.address);
+  const dispatch = useDispatch();
   var currentInfowindow = null;
 
   useEffect(() => {
@@ -29,12 +32,12 @@ export default function Map({ style, ...props }) {
 
   useEffect(() => {
     //Toda vez que um endereço válido ser inserido, mostra os locais de descarte próximos dele...
-    if (state.address !== null)
+    if (stateAddress !== null)
       showMarkers();
-  }, [state.address])
+  }, [stateAddress])
 
   async function showMarkers() {
-    let aux = { ...state.address };
+    let aux = { ...stateAddress };
     if (aux.logradouro !== undefined) {
       const formatedAddress = aux.logradouro + ',' + aux.numero + ',' + aux.bairro + ',' + aux.localidade + ',' + aux.uf;
 
@@ -48,6 +51,8 @@ export default function Map({ style, ...props }) {
         lat: lat,
         lng: lng
       }
+      dispatch(resetMarkers());
+      dispatch(setCoordinates(location));
       setCurrentLocation(location);
 
       const map = new google.maps.Map(
@@ -58,7 +63,7 @@ export default function Map({ style, ...props }) {
             featureType: 'poi',
             elementType: 'labels',
             stylers: [
-              { visibility: 'off'}
+              { visibility: 'off' }
             ]
           }]
         });
@@ -96,8 +101,9 @@ export default function Map({ style, ...props }) {
     }
   }
 
-  function createMarkers(place, map) {
+  async function createMarkers(place, map) {
     const infowindow = new google.maps.InfoWindow();
+
     //Cria um marcador para cada lugar próximo encontrado...
     const marker = new google.maps.Marker({
       map,
@@ -108,6 +114,17 @@ export default function Map({ style, ...props }) {
         scaledSize: new google.maps.Size(50, 50), // Defina as dimensões desejadas
       },
     });
+
+    const aux = {
+      position: {
+        lat: place.geometry.location.lat(),
+        lng: place.geometry.location.lng(),
+      },
+      address: place.formatted_address,
+      title: place.name,
+    };
+
+    dispatch(addMarker(aux));
 
     marker.addListener("click", () => {
 

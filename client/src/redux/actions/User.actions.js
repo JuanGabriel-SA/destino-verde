@@ -1,6 +1,6 @@
-export function setUsers (payload) {
+export function setUser (payload) {
     return {
-        type: 'SET_USERS',
+        type: 'SET_USER',
         payload: payload
     }
 }

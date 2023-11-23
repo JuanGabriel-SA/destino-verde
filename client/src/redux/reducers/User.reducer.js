@@ -2,7 +2,7 @@ export default function (state = null, action) {
     switch (action.type) {
         case 'NEW_USER':
             return action.payload;
-        case 'SET_USERS':
+        case 'SET_USER':
             return action.payload;
         case 'DELETE_USER':
             return state.filter(({ id }) => id !== action.payload)

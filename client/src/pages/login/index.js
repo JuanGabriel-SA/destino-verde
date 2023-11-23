@@ -34,13 +34,10 @@ export default function Login() {
           email: email,
           senha: password
         }));
-        const token = await fetch(`http://localhost:4000/get-token/${user[0].id}`).then(res => res.json());
-        const isCookiesAllowed = localStorage.getItem('allow_cookies');
 
-        if (isCookiesAllowed == null || isCookiesAllowed == false)
-          localStorage.setItem('user_token', JSON.stringify(token));
-        else
-          cookie.set('user_token', token, { expires: 7 });
+        const token = await fetch(`http://localhost:4000/get-token/${user[0].id}`).then(res => res.json());
+        cookie.set('user_token', token);
+        cookie.set('user_data', JSON.stringify(user[0]));
 
         router.push('/home-user');
       }
