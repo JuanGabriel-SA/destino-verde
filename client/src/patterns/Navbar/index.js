@@ -1,6 +1,6 @@
 import { Col, Divider, Row, notification } from 'antd';
 import styles from './Navbar.module.css';
-import { BiExit, BiHome, BiLocationPlus, BiMap, BiRecycle, BiSearch, BiSolidUserCircle } from 'react-icons/bi';
+import { BiExit, BiHome, BiLocationPlus, BiMap, BiRecycle, BiSearch, BiSolidUserCircle, BiUser, BiUserPlus } from 'react-icons/bi';
 import { motion } from 'framer';
 import { useEffect, useState } from 'react';
 import Input from '@/components/Input';
@@ -150,12 +150,25 @@ const Navbar = () => {
 
         if (currentURL !== '/analyze-image') {
             items.push(
-                <Link key="analyze-image-link" href='/analyze-image' style={{ color: 'black' }}>
+                <Link key="analyze-image-link" href='/analyze-image' style={{ color: 'black'  }}>
                     <li className={styles.navbarListItem}>
                         <span>
                             <BiRecycle />
                         </span>
                         <h3>Analisar reciclável</h3>
+                    </li>
+                </Link>
+            )
+        }
+
+        if (currentURL !== '/sign-up') {
+            items.push(
+                <Link key="signup-link" href='/sign-up' style={{ color: 'black' }}>
+                    <li className={styles.navbarListItem}>
+                        <span>
+                            <BiUserPlus />
+                        </span>
+                        <h3>Cadastrar-se</h3>
                     </li>
                 </Link>
             )
@@ -282,7 +295,7 @@ const Navbar = () => {
                                 </Alert>
                                 <Button onClick={e => getAddres()} style={{ marginLeft: 0 }} icon={BiSearch}>Buscar</Button>
                             </li>
-                            <li variants={listVariants}>
+                            <li>
                                 <Col xs={{ span: 24 }}>
                                     <Divider />
                                     <Row justify={'center'}>
