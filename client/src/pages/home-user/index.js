@@ -4,10 +4,11 @@ import Map from '@/patterns/Map';
 import { Col, Divider, Row } from 'antd';
 import { motion } from 'framer';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { parseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import * as cookie from 'cookie'
 import { BiChevronLeft, BiChevronRight } from 'react-icons/bi';
+import { setUser } from '@/redux/actions/User.actions';
 
 export async function getServerSideProps(ctx) {
     if (ctx.req.headers.cookie !== undefined) {
@@ -30,12 +31,14 @@ export async function getServerSideProps(ctx) {
     }
 }
 
-export default function HomeUser({ token }) {
+export default function HomeUser({ user, token }) {
     const stateCoordinates = useSelector(state => state.userCoordinates);
     const stateMarkers = useSelector(state => state.markers);
+    const stateUser = useSelector(state => state.user)
     const [showPlaceList, setShowPlaceList] = useState(false);
     const [screenWidth, setScreenWidth] = useState(undefined);
     const [collapseList, setCollapseList] = useState(false);
+    const dispatch = useDispatch();
 
     const listVariants = {
         show: {
@@ -146,6 +149,11 @@ export default function HomeUser({ token }) {
         if (stateMarkers.length > 0)
             setShowPlaceList(true);
     }, [stateMarkers])
+
+    useEffect(() => {
+        if (stateUser == null)
+            dispatch(setUser(JSON.parse(user)));
+    }, [])
 
     useEffect(() => {
         if (typeof window !== 'undefined') {

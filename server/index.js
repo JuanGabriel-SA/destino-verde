@@ -8,7 +8,7 @@ const app = express();
 app.use(cors({
     credentials: true,
     //Trocar origin de acordo com a url do FRONT-END...
-    origin: ['http://localhost:3000', 'http://192.168.100.2:3000']
+    origin: ['http://localhost:3000', 'http://192.168.100.2:3000', 'https://destino-verde.vercel.app']
 }));
 
 const cookieParser = require('cookie-parser');
