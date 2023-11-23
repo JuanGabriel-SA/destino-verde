@@ -1,11 +1,11 @@
 const mysql = require("mysql");
 
 const connection = mysql.createPool({
-    host: 'localhost',
+    host: 'destino-verde-dataserver.mysql.database.azure.com',
     port: 3306,
-    user: 'root',
-    password: '',
-    database: 'destino-verde',
+    user: 'bushouko',
+    password: 'Bobli947*',
+    database: 'destino-verde-database',
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
