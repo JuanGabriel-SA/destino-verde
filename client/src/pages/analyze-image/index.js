@@ -84,7 +84,7 @@ export default function AnalyzeImage({ user, token }) {
         setShowLoading(true);
 
         try {
-            const result = await fetch('http://destino-verde-f6428812864e.herokuapp.com/get-image-info/' + 4, {
+            const result = await fetch('https://destino-verde-f6428812864e.herokuapp.com/get-image-info/' + 4, {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                 },
