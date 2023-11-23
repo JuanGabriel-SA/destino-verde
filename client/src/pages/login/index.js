@@ -26,7 +26,7 @@ export default function Login() {
 
     if (await validateLogin()) {
       const user = await fetch(`https://destino-verde-f6428812864e.herokuapp.com/login/${email}/${password}`).then(res => res.json());
-
+   
       //Usuário encontrado...
       if (user.length > 0) {
         //Adiciona no estado local...
@@ -36,6 +36,7 @@ export default function Login() {
         }));
 
         const token = await fetch(`https://destino-verde-f6428812864e.herokuapp.com/get-token/${user[0].id}`).then(res => res.json());
+        
         cookie.set('user_token', token);
         cookie.set('user_data', JSON.stringify(user[0]));
 

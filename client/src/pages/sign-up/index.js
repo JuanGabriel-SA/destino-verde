@@ -26,7 +26,7 @@ export default function SignUp() {
                 email: email,
                 senha: password
             }
-            await fetch('http://localhost:4000/new-user', {
+            await fetch('http://destino-verde-f6428812864e.herokuapp.com/new-user', {
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export default function SignUp() {
             return false;
         }
 
-        const user = await fetch(`http://localhost:4000/verify-user/${email}`).then(res => res.json());
+        const user = await fetch(`http://destino-verde-f6428812864e.herokuapp.com/verify-user/${email}`).then(res => res.json());
 
         if (user.length > 0) {
             await setErrorMessage('Já existe um usuário com esse email.');
