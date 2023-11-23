@@ -25,7 +25,7 @@ export default function Login() {
   async function doLogin() {
 
     if (await validateLogin()) {
-      const user = await fetch(`http://localhost:4000/login/${email}/${password}`).then(res => res.json());
+      const user = await fetch(`https://destino-verde-f6428812864e.herokuapp.com/login/${email}/${password}`).then(res => res.json());
 
       //Usuário encontrado...
       if (user.length > 0) {
@@ -35,7 +35,7 @@ export default function Login() {
           senha: password
         }));
 
-        const token = await fetch(`http://localhost:4000/get-token/${user[0].id}`).then(res => res.json());
+        const token = await fetch(`https://destino-verde-f6428812864e.herokuapp.com/get-token/${user[0].id}`).then(res => res.json());
         cookie.set('user_token', token);
         cookie.set('user_data', JSON.stringify(user[0]));
 
