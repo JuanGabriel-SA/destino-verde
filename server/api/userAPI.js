@@ -28,6 +28,7 @@ const getUser = app => {
 
 const loginUser = app => {
     app.get('/login/:email/:password', (req, res) => {
+        console.log('ovo')
         connection.query(`SELECT * FROM usuarios WHERE email = '${req.params.email}' 
         AND senha = '${req.params.password}'`, (error, result) => {
             if (error)
