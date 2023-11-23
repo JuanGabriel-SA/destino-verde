@@ -75,55 +75,6 @@ export default function Home() {
 
   return (
     <animated.main className={styles.mainHome} style={{ ...animatedProps }}>
-      <Modal visible={showModalCookies} trigger={setShowModalCookies} className={styles.modalCookies}>
-        <Row>
-          <Col xs={{ span: 24 }}>
-            <Row>
-              <h1>Nós utilizamos cookies</h1>
-            </Row>
-          </Col>
-          <Col xs={{ span: 24 }}>
-            <Row>
-              <p>
-                Nós utilizamos <b>cookies</b> para tornar a sua experiência mais dinâmica.
-              </p>
-            </Row>
-          </Col>
-          <Col xs={{ span: 24 }}>
-            <Row justify={'start'}>
-              <Button
-                icon={BiCheck}
-                onClick={e => cookiesController(true)}
-                style={{
-                  fontSize: 20,
-                  maxHeight: 70,
-                  height: 70,
-                  borderRadius: 0,
-                  marginLeft: 0,
-                  marginRight: 0,
-                  width: '60%'
-                }}>
-                Aceitar todos os cookies
-              </Button>
-              <Button
-                icon={MdClose}
-                onClick={e => cookiesController(false)}
-                style={{
-                  fontSize: 20,
-                  maxHeight: 70,
-                  height: 70,
-                  borderRadius: 0,
-                  marginLeft: 20,
-                  marginRight: 0,
-                  width: '36%'
-                }}>
-                Rejeitar
-              </Button>
-            </Row>
-          </Col>
-        </Row>
-      </Modal>
-
       <Row justify={'center'}>
         <Col xs={{ span: 12 }}>
           <Row>
