@@ -30,7 +30,7 @@ export async function getServerSideProps(ctx) {
     }
 }
 
-export default function homeUser({ token }) {
+export default function HomeUser({ token }) {
     const stateCoordinates = useSelector(state => state.userCoordinates);
     const stateMarkers = useSelector(state => state.markers);
     const [showPlaceList, setShowPlaceList] = useState(false);

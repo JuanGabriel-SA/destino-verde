@@ -27,6 +27,7 @@ const Navbar = () => {
     const stateCoordinates = useSelector(state => state.userCoordinates);
     const dispatch = useDispatch();
     const router = useRouter();
+    const currentURL = router.asPath;
 
     const attScreen = () => {
         setScreenWidth(window.innerWidth);
@@ -79,20 +80,6 @@ const Navbar = () => {
         }
     }
 
-    const listVariants = {
-        show: {
-            opacity: 1,
-            transition: {
-                ease: 'circOut',
-                duration: 0.3
-            }
-        },
-
-        hide: {
-            opacity: 0
-        }
-    }
-
     async function getAddres() {
         if (validateAddress())
             await fetch(`https://viacep.com.br/ws/${cep}/json/`)
@@ -133,7 +120,6 @@ const Navbar = () => {
 
     function createItems() {
         let items = [];
-        const currentURL = router.asPath;
 
         if (currentURL !== '/home-user') {
             items.push(
@@ -150,7 +136,7 @@ const Navbar = () => {
 
         if (currentURL !== '/analyze-image') {
             items.push(
-                <Link key="analyze-image-link" href='/analyze-image' style={{ color: 'black'  }}>
+                <Link key="analyze-image-link" href='/analyze-image' style={{ color: 'black' }}>
                     <li className={styles.navbarListItem}>
                         <span>
                             <BiRecycle />
@@ -265,36 +251,38 @@ const Navbar = () => {
                     <Row>
                         <ul className={styles.navbarList}>
                             {createItems()}
-                            <li className={styles.searchLocationField}>
-                                <Input
-                                    onFocus={e => setShowCepError(false)}
-                                    value={cep}
-                                    mask='99999-999'
-                                    onChange={e => setCep(e.target.value)}
-                                    placeholder='Digite o CEP...'
-                                    style={{ margin: 0 }}
-                                    icon={BiLocationPlus}
-                                    colorType='secondary' />
-                                <Input
-                                    onFocus={e => setShowCepError(false)}
-                                    icon={BiHome}
-                                    placeholder='Digite o número...'
-                                    value={addressNumber}
-                                    onChange={e => {
-                                        let formatedValue = e.target.value.replace(/\D/g, '');
-                                        setAddressNumber(formatedValue);
-                                    }}
-                                    style={{ marginLeft: 0, marginRight: 0 }}
-                                    colorType='secondary' />
-                                <Alert
-                                    style={{ marginLeft: 0, marginRight: 0 }}
-                                    trigger={setShowCepError}
-                                    visible={showCepError}
-                                    type='error'>
-                                    CEP ou número incorreto(s).
-                                </Alert>
-                                <Button onClick={e => getAddres()} style={{ marginLeft: 0 }} icon={BiSearch}>Buscar</Button>
-                            </li>
+                            {currentURL == '/home-user' &&
+                                <li className={styles.searchLocationField}>
+                                    <Input
+                                        onFocus={e => setShowCepError(false)}
+                                        value={cep}
+                                        mask='99999-999'
+                                        onChange={e => setCep(e.target.value)}
+                                        placeholder='Digite o CEP...'
+                                        style={{ margin: 0 }}
+                                        icon={BiLocationPlus}
+                                        colorType='secondary' />
+                                    <Input
+                                        onFocus={e => setShowCepError(false)}
+                                        icon={BiHome}
+                                        placeholder='Digite o número...'
+                                        value={addressNumber}
+                                        onChange={e => {
+                                            let formatedValue = e.target.value.replace(/\D/g, '');
+                                            setAddressNumber(formatedValue);
+                                        }}
+                                        style={{ marginLeft: 0, marginRight: 0 }}
+                                        colorType='secondary' />
+                                    <Alert
+                                        style={{ marginLeft: 0, marginRight: 0 }}
+                                        trigger={setShowCepError}
+                                        visible={showCepError}
+                                        type='error'>
+                                        CEP ou número incorreto(s).
+                                    </Alert>
+                                    <Button onClick={e => getAddres()} style={{ marginLeft: 0 }} icon={BiSearch}>Buscar</Button>
+                                </li>
+                            }
                             <li>
                                 <Col xs={{ span: 24 }}>
                                     <Divider />

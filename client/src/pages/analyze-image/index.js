@@ -34,7 +34,7 @@ export async function getServerSideProps(ctx) {
     }
 }
 
-export default function analyzeImage({ user, token }) {
+export default function AnalyzeImage({ user, token }) {
     const [imageUrl, setImageUrl] = useState('');
     const [image, setImage] = useState();
     const [isReciclabe, setIsReciclable] = useState(null);

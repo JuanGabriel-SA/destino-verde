@@ -12,7 +12,7 @@ import Alert from '@/components/Alert';
 import { useRouter } from 'next/router';
 import validator from 'validator';
 
-export default function signUp() {
+export default function SignUp() {
     const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
