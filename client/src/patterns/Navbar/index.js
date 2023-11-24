@@ -317,7 +317,7 @@ const Navbar = () => {
                             </li>
 
                             <li>
-                                {(showAlternativeNav && stateMarkers.length > 0) &&
+                                {(showAlternativeNav && stateMarkers.length > 0 && currentURL == '/home-user') &&
                                     <div className={styles.placeListContainer}>
                                         <Divider />
                                         <h2 style={{
