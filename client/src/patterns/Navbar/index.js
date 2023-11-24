@@ -146,22 +146,7 @@ const Navbar = () => {
                 </Link>
             )
         }
-
-        if (currentURL !== '/sign-up') {
-            items.push(
-                <Link key="signup-link" href='/sign-up' style={{ color: 'black' }}>
-                    <li className={styles.navbarListItem}>
-                        <span>
-                            <BiUserPlus />
-                        </span>
-                        <h3>Cadastrar-se</h3>
-                    </li>
-                </Link>
-            )
-        }
-
         return items;
-
     }
 
     function createPlacesList() {
