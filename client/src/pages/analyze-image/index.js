@@ -193,7 +193,7 @@ export default function AnalyzeImage({ user, token }) {
                                                                                                 fontFamily: 'Inter, sans-serif',
                                                                                                 fontWeight: 500
                                                                                             }}>
-                                                                                            {reciclabeName !== '' ?
+                                                                                            {isReciclabe ?
                                                                                                 'Objeto reciclável' :
                                                                                                 'Objeto não reciclável'
                                                                                             }
